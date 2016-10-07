@@ -7,7 +7,6 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AzureCloud;
@@ -16,7 +15,6 @@ using DataModel;
 using Microsoft.Azure.Documents.Client;
 using Microsoft.Azure.Documents.Spatial;
 using NLog;
-using NLog.Fluent;
 
 namespace Gps
 {
@@ -54,21 +52,6 @@ namespace Gps
 
             var dataPoints = _dataImporter.ReadGpxFile(@"C:\temp\20130616_063718.gpx").ToList();
 
-            for (int i = 1; i < dataPoints.Count; i++)
-            {
-                var previous = dataPoints[i - 1];
-                var current = dataPoints[i];
-
-                var distanceBetweenPointsInMeters = previous.Location.Distance(current.Location);
-                // ReSharper disable PossibleInvalidOperationException
-                var timeBetweenPointsInSeconds = (current.DateTime.Value - previous.DateTime.Value).TotalSeconds;
-
-                var speedInMetersPerSecond = distanceBetweenPointsInMeters / timeBetweenPointsInSeconds;
-                var speedInKmPerHour = speedInMetersPerSecond * 3.6;
-
-                current.Speed = speedInKmPerHour;
-            }
-
             _cloudManager = new CloudManager(new AppConfiguration());
 
             _client = _cloudManager.GetDocumentClient();
@@ -80,6 +63,25 @@ namespace Gps
             foreach (var dataPoint in dataPoints)
             {
                 await _cloudManager.CreateDocumentIfNotExists(_client, databaseName, collectionName, dataPoint);
+            }
+
+            var documents =
+                _client.CreateDocumentQuery<DataPoint>(UriFactory.CreateDocumentCollectionUri(databaseName,
+                    collectionName)).ToList();
+
+            for (int i = 1; i < documents.Count; i++)
+            {
+                var previous = documents[i - 1];
+                var current = documents[i];
+
+                var distanceBetweenPointsInMeters = previous.Location.Distance(current.Location);
+                // ReSharper disable PossibleInvalidOperationException
+                var timeBetweenPointsInSeconds = (current.DateTime.Value - previous.DateTime.Value).TotalSeconds;
+
+                var speedInMetersPerSecond = distanceBetweenPointsInMeters / timeBetweenPointsInSeconds;
+                var speedInKmPerHour = speedInMetersPerSecond * 3.6;
+
+                current.Speed = speedInKmPerHour;
             }
         }
     }
