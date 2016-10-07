@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40629.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gps", "Gps\Gps.csproj", "{683B6CC0-3EC9-41CF-B172-B9713AEDABE2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureCloud", "AzureCloud\AzureCloud.csproj", "{8A2CB06B-91BE-4EEE-9797-47838EEA2E45}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataImporter", "DataImporter\DataImporter.csproj", "{DC0AA183-83FE-42C7-954C-241A16B98752}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataModel", "DataModel\DataModel.csproj", "{47A83C01-0DE0-4080-9496-2485BCD567D3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{683B6CC0-3EC9-41CF-B172-B9713AEDABE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{683B6CC0-3EC9-41CF-B172-B9713AEDABE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{683B6CC0-3EC9-41CF-B172-B9713AEDABE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{683B6CC0-3EC9-41CF-B172-B9713AEDABE2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A2CB06B-91BE-4EEE-9797-47838EEA2E45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A2CB06B-91BE-4EEE-9797-47838EEA2E45}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A2CB06B-91BE-4EEE-9797-47838EEA2E45}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A2CB06B-91BE-4EEE-9797-47838EEA2E45}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC0AA183-83FE-42C7-954C-241A16B98752}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC0AA183-83FE-42C7-954C-241A16B98752}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC0AA183-83FE-42C7-954C-241A16B98752}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC0AA183-83FE-42C7-954C-241A16B98752}.Release|Any CPU.Build.0 = Release|Any CPU
+		{47A83C01-0DE0-4080-9496-2485BCD567D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47A83C01-0DE0-4080-9496-2485BCD567D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47A83C01-0DE0-4080-9496-2485BCD567D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47A83C01-0DE0-4080-9496-2485BCD567D3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
