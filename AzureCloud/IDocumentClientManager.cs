@@ -18,5 +18,6 @@ namespace AzureCloud
         Task CreateDatabaseIfNotExistsAsync(DocumentClient client, string databaseName);
         Task CreateDocumentCollectionIfNotExists(DocumentClient client, string databaseName, string collectionName);
         Task CreateDocumentIfNotExists(DocumentClient client, string databaseName, string collectionName, IDocument document);
+        Task ReplaceDocument(DocumentClient client, string databaseName, string collectionName, IDocument document);
     }
 }

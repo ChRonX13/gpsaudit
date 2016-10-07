@@ -82,6 +82,8 @@ namespace Gps
                 var speedInKmPerHour = speedInMetersPerSecond * 3.6;
 
                 current.Speed = speedInKmPerHour;
+
+                await _cloudManager.ReplaceDocument(_client, databaseName, collectionName, current);
             }
         }
     }

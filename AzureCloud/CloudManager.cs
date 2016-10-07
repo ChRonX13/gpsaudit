@@ -8,6 +8,7 @@
 
 using System;
 using System.Globalization;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using DataModel;
@@ -108,6 +109,17 @@ namespace AzureCloud
                     throw;
                 }
             }
+        }
+
+        public async Task ReplaceDocument(DocumentClient client, string databaseName, string collectionName,
+            IDocument document)
+        {
+            Logger.Info("Replacing document...");
+
+            await client.ReplaceDocumentAsync(
+                    UriFactory.CreateDocumentUri(databaseName, collectionName,
+                        document.Id.ToString(CultureInfo.InvariantCulture)),
+                    document);
         }
 
         private async Task CreateCollection(DocumentClient client, string databaseName, string collectionName)
