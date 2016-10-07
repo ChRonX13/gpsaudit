@@ -76,9 +76,7 @@ namespace Gps
 
             Logger.Info("Querying documents...");
 
-            var documents =
-                _client.CreateDocumentQuery<DataPoint>(UriFactory.CreateDocumentCollectionUri(databaseName,
-                    collectionName)).ToList();
+            var documents = GetDataPointQueryable(databaseName, collectionName).ToList();
 
             Logger.Info("Calculating speed and updating documents...");
 
@@ -89,7 +87,10 @@ namespace Gps
                 var previous = documents[i - 1];
                 var current = documents[i];
 
-                var distanceBetweenPointsInMeters = previous.Location.Distance(current.Location);
+                //var distanceBetweenPointsInMeters = previous.Location.Distance(current.Location);
+
+                var distanceBetweenPointsInMeters = GetDataPointQueryable(databaseName, collectionName).Where(x => x.Id == current.Id).Select(x => x.Location.Distance(previous.Location));
+
                 // ReSharper disable PossibleInvalidOperationException
                 var timeBetweenPointsInSeconds = (current.DateTime.Value - previous.DateTime.Value).TotalSeconds;
 
@@ -104,6 +105,12 @@ namespace Gps
             Logger.Info("Updated {0} records, {1} per second, in {2} seconds", documents.Count,
                 string.Format("{0:N2}", documents.Count / watch.Elapsed.TotalSeconds),
                 string.Format("{0:N2}", watch.Elapsed.TotalSeconds));
+        }
+
+        private IQueryable<DataPoint> GetDataPointQueryable(string databaseName, string collectionName)
+        {
+            return _client.CreateDocumentQuery<DataPoint>(UriFactory.CreateDocumentCollectionUri(databaseName,
+                collectionName));
         }
     }
 }
