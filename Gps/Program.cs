@@ -7,6 +7,7 @@
 #endregion
 
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using AzureCloud;
@@ -60,14 +61,28 @@ namespace Gps
 
             await _cloudManager.CreateDocumentCollectionIfNotExists(_client, databaseName, collectionName);
 
+            Logger.Info("Creating documents...");
+
+            Stopwatch watch = Stopwatch.StartNew();
+
             foreach (var dataPoint in dataPoints)
             {
                 await _cloudManager.CreateDocumentIfNotExists(_client, databaseName, collectionName, dataPoint);
             }
 
+            Logger.Info("Created {0} records, {1} per second, in {2} seconds", dataPoints.Count,
+                string.Format("{0:N2}", dataPoints.Count/watch.Elapsed.TotalSeconds),
+                string.Format("{0:N2}", watch.Elapsed.TotalSeconds));
+
+            Logger.Info("Querying documents...");
+
             var documents =
                 _client.CreateDocumentQuery<DataPoint>(UriFactory.CreateDocumentCollectionUri(databaseName,
                     collectionName)).ToList();
+
+            Logger.Info("Calculating speed and updating documents...");
+
+            watch.Restart();
 
             for (int i = 1; i < documents.Count; i++)
             {
@@ -85,6 +100,10 @@ namespace Gps
 
                 await _cloudManager.ReplaceDocument(_client, databaseName, collectionName, current);
             }
+
+            Logger.Info("Updated {0} records, {1} per second, in {2} seconds", documents.Count,
+                string.Format("{0:N2}", documents.Count / watch.Elapsed.TotalSeconds),
+                string.Format("{0:N2}", watch.Elapsed.TotalSeconds));
         }
     }
 }
