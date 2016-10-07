@@ -50,7 +50,7 @@ namespace Gps
 
             _dataImporter = new GpxImporter();
 
-            var dataPoints = _dataImporter.ReadGpxFile(@"C:\temp\20130616_063718.gpx").ToList();
+            var dataPoints = _dataImporter.ReadGpxFile(@"C:\temp\20130616_030908.gpx").ToList();
 
             _cloudManager = new CloudManager(new AppConfiguration());
 
