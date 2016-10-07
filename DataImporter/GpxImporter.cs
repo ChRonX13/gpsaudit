@@ -29,6 +29,8 @@ namespace DataImporter
             XDocument document = XDocument.Load(file);
             XNamespace gpx = XNamespace.Get("http://www.topografix.com/GPX/1/1");
 
+            int count = 0;
+
             List<DataPoint> dataPoints = (from segment in document.Descendants(gpx + "trk")
                 from trackPoint in segment.Descendants(gpx + "trkpt")
                 let longitude = double.Parse(trackPoint.Attribute("lon").Value)
@@ -37,8 +39,10 @@ namespace DataImporter
                     // ReSharper disable once PossibleNullReferenceException
                     ? Double.Parse(trackPoint.Element(gpx + "ele").Value)
                     : (double?) null
+                let id = count++ 
                 select new DataPoint
                 {
+                    Id = id,
                     // ReSharper disable once PossibleNullReferenceException
                     DateTime =
                         trackPoint.Element(gpx + "time") != null
@@ -51,7 +55,7 @@ namespace DataImporter
                 string.Format("{0:N2}", dataPoints.Count/watch.Elapsed.TotalSeconds),
                 string.Format("{0:N2}", watch.Elapsed.TotalSeconds));
 
-            return dataPoints;
+            return dataPoints.OrderBy(x => x.DateTime);
         }
     }
 }

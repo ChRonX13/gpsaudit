@@ -7,8 +7,10 @@
 #endregion
 
 using System;
+using System.Globalization;
 using System.Net;
 using System.Threading.Tasks;
+using DataModel;
 using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
 using NLog;
@@ -83,9 +85,29 @@ namespace AzureCloud
             }
         }
 
-        public async Task CreateDocument(DocumentClient client, string databaseName, string collectionName, object document)
+        public async Task CreateDocumentIfNotExists(DocumentClient client, string databaseName, string collectionName, IDocument document)
         {
-            await client.CreateDocumentAsync(UriFactory.CreateDocumentCollectionUri(databaseName, collectionName), document);
+            try
+            {
+                Logger.Info("Checking if document exists...");
+
+                await client.ReadDocumentAsync(UriFactory.CreateDocumentUri(databaseName, collectionName, document.Id.ToString(CultureInfo.InvariantCulture)));
+
+                Logger.Info("Document exists, skipping...");
+            }
+            catch (DocumentClientException ex)
+            {
+                if (ex.StatusCode == HttpStatusCode.NotFound)
+                {
+                    Logger.Info("Document does not exist, creating...");
+
+                    CreateDocument(client, databaseName, collectionName, document).Wait();
+                }
+                else
+                {
+                    throw;
+                }
+            }
         }
 
         private async Task CreateCollection(DocumentClient client, string databaseName, string collectionName)
@@ -102,6 +124,12 @@ namespace AzureCloud
         private async Task CreateDatabase(DocumentClient client, string databaseName)
         {
             await client.CreateDatabaseAsync(new Database {Id = databaseName});
+        }
+
+        private async Task CreateDocument(DocumentClient client, string databaseName, string collectionName,
+            object document)
+        {
+            await client.CreateDocumentAsync(UriFactory.CreateDocumentCollectionUri(databaseName, collectionName), document);
         }
     }
 }

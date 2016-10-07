@@ -7,6 +7,7 @@
 #endregion
 
 using System.Threading.Tasks;
+using DataModel;
 using Microsoft.Azure.Documents.Client;
 
 namespace AzureCloud
@@ -16,6 +17,6 @@ namespace AzureCloud
         DocumentClient GetDocumentClient();
         Task CreateDatabaseIfNotExistsAsync(DocumentClient client, string databaseName);
         Task CreateDocumentCollectionIfNotExists(DocumentClient client, string databaseName, string collectionName);
-        Task CreateDocument(DocumentClient client, string databaseName, string collectionName, object document);
+        Task CreateDocumentIfNotExists(DocumentClient client, string databaseName, string collectionName, IDocument document);
     }
 }
