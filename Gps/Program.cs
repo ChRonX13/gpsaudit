@@ -89,7 +89,7 @@ namespace Gps
 
                 //var distanceBetweenPointsInMeters = previous.Location.Distance(current.Location);
 
-                var distanceBetweenPointsInMeters = GetDataPointQueryable(databaseName, collectionName).Where(x => x.Id == current.Id).Select(x => x.Location.Distance(previous.Location));
+                var distanceBetweenPointsInMeters = GetDataPointQueryable(databaseName, collectionName).Where(x => x.Id == current.Id).Select(x => x.Location.Distance(previous.Location)).First();
 
                 // ReSharper disable PossibleInvalidOperationException
                 var timeBetweenPointsInSeconds = (current.DateTime.Value - previous.DateTime.Value).TotalSeconds;
