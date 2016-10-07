@@ -8,8 +8,8 @@
 
 using System;
 using System.Globalization;
-using System.Linq;
 using System.Net;
+using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
 using DataModel;
 using Microsoft.Azure.Documents;
@@ -38,6 +38,8 @@ namespace AzureCloud
 
         public async Task CreateDatabaseIfNotExistsAsync(DocumentClient client, string databaseName)
         {
+            ExceptionDispatchInfo capturedException = null;
+
             try
             {
                 Logger.Info("Checking if database exists...");
@@ -50,19 +52,26 @@ namespace AzureCloud
             {
                 if (ex.StatusCode == HttpStatusCode.NotFound)
                 {
-                    Logger.Info("Database does not exist, creating...");
-
-                    CreateDatabase(client, databaseName).Wait();
+                    capturedException = ExceptionDispatchInfo.Capture(ex);
                 }
                 else
                 {
                     throw;
                 }
             }
+
+            if (capturedException != null)
+            {
+                Logger.Info("Database does not exist, creating...");
+
+                await CreateDatabase(client, databaseName);
+            }
         }
 
         public async Task CreateDocumentCollectionIfNotExists(DocumentClient client, string databaseName, string collectionName)
         {
+            ExceptionDispatchInfo capturedException = null;
+
             try
             {
                 Logger.Info("Checking if collection exists...");
@@ -75,19 +84,26 @@ namespace AzureCloud
             {
                 if (ex.StatusCode == HttpStatusCode.NotFound)
                 {
-                    Logger.Info("Collection does not exist, creating...");
-
-                    CreateCollection(client, databaseName, collectionName).Wait();
+                    capturedException = ExceptionDispatchInfo.Capture(ex);
                 }
                 else
                 {
                     throw;
                 }
             }
+
+            if (capturedException != null)
+            {
+                Logger.Info("Collection does not exist, creating...");
+
+                await CreateCollection(client, databaseName, collectionName);
+            }
         }
 
         public async Task CreateDocumentIfNotExists(DocumentClient client, string databaseName, string collectionName, IDocument document)
         {
+            ExceptionDispatchInfo capturedException = null;
+
             try
             {
                 await client.ReadDocumentAsync(UriFactory.CreateDocumentUri(databaseName, collectionName, document.Id.ToString(CultureInfo.InvariantCulture)));
@@ -96,12 +112,17 @@ namespace AzureCloud
             {
                 if (ex.StatusCode == HttpStatusCode.NotFound)
                 {
-                    CreateDocument(client, databaseName, collectionName, document).Wait();
+                    capturedException = ExceptionDispatchInfo.Capture(ex);
                 }
                 else
                 {
                     throw;
                 }
+            }
+
+            if (capturedException != null)
+            {
+                await CreateDocument(client, databaseName, collectionName, document);
             }
         }
 
