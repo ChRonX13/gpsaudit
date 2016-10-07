@@ -7,7 +7,6 @@
 #endregion
 
 using System;
-using System.Globalization;
 using System.Net;
 using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
@@ -106,7 +105,7 @@ namespace AzureCloud
 
             try
             {
-                await client.ReadDocumentAsync(UriFactory.CreateDocumentUri(databaseName, collectionName, document.Id.ToString(CultureInfo.InvariantCulture)));
+                await client.ReadDocumentAsync(UriFactory.CreateDocumentUri(databaseName, collectionName, document.Id));
             }
             catch (DocumentClientException ex)
             {
@@ -129,10 +128,7 @@ namespace AzureCloud
         public async Task ReplaceDocument(DocumentClient client, string databaseName, string collectionName,
             IDocument document)
         {
-            await client.ReplaceDocumentAsync(
-                    UriFactory.CreateDocumentUri(databaseName, collectionName,
-                        document.Id.ToString(CultureInfo.InvariantCulture)),
-                    document);
+            await client.ReplaceDocumentAsync(UriFactory.CreateDocumentUri(databaseName, collectionName, document.Id), document);
         }
 
         private async Task CreateCollection(DocumentClient client, string databaseName, string collectionName)

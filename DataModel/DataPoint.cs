@@ -15,7 +15,7 @@ namespace DataModel
     public class DataPoint : IDocument
     {
         [JsonProperty("id")]
-        public int Id { get; set; }
+        public string Id { get; set; }
 
         [JsonProperty("datetime")]
         public DateTime? DateTime { get; set; }

@@ -10,6 +10,6 @@ namespace DataModel
 {
     public interface IDocument
     {
-        int Id { get; set; }
+        string Id { get; set; }
     }
 }

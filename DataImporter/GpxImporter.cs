@@ -9,6 +9,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Xml.Linq;
 using DataModel;
@@ -42,7 +43,7 @@ namespace DataImporter
                 let id = count++ 
                 select new DataPoint
                 {
-                    Id = id,
+                    Id = id.ToString(CultureInfo.InvariantCulture),
                     // ReSharper disable once PossibleNullReferenceException
                     DateTime =
                         trackPoint.Element(gpx + "time") != null
