@@ -90,18 +90,12 @@ namespace AzureCloud
         {
             try
             {
-                Logger.Info("Checking if document exists...");
-
                 await client.ReadDocumentAsync(UriFactory.CreateDocumentUri(databaseName, collectionName, document.Id.ToString(CultureInfo.InvariantCulture)));
-
-                Logger.Info("Document exists, skipping...");
             }
             catch (DocumentClientException ex)
             {
                 if (ex.StatusCode == HttpStatusCode.NotFound)
                 {
-                    Logger.Info("Document does not exist, creating...");
-
                     CreateDocument(client, databaseName, collectionName, document).Wait();
                 }
                 else
@@ -114,8 +108,6 @@ namespace AzureCloud
         public async Task ReplaceDocument(DocumentClient client, string databaseName, string collectionName,
             IDocument document)
         {
-            Logger.Info("Replacing document...");
-
             await client.ReplaceDocumentAsync(
                     UriFactory.CreateDocumentUri(databaseName, collectionName,
                         document.Id.ToString(CultureInfo.InvariantCulture)),
