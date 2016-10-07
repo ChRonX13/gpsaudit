@@ -91,7 +91,7 @@ namespace Gps
 
                 var distanceBetweenPointsInMeters =
                     GetDataPointQueryable(databaseName, collectionName)
-                        .Single(x => x.Id == current.Id)
+                        .Where(x => x.Id == current.Id).AsEnumerable().First()
                         .Location.Distance(previous.Location);
 
                 // ReSharper disable PossibleInvalidOperationException
